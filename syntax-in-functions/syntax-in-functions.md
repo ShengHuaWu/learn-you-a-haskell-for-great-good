@@ -29,3 +29,8 @@ capital :: String -> String
 capital "" = "Empty string, whoops!"  
 capital all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x]
 ```
+
+### Guards
+Guards are indicated by pipes that follow a function's name and its parameters. Usually, they're indented a bit to the right and lined up. A guard is basically a boolean expression. If it evaluates to `True`, then the corresponding function body is used. If it evaluates to `False`, checking drops through to the next guard and so on.
+
+Note that there's no `=` right after the function name and its parameters, before the first guard. Many newbies get syntax errors because they sometimes put it there.
