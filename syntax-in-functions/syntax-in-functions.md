@@ -39,3 +39,14 @@ Note that there's no `=` right after the function name and its parameters, befor
 We can also use `where` bindings to pattern match.
 Just like we've defined constants in `where` blocks, we can also define functions.
 `where` bindings can also be nested. It's a common idiom to make a function and define some helper function in its `where` clause and then to give those functions helper functions as well, each with its own `where` clause.
+
+### Let
+Let bindings let you bind to variables anywhere and are expressions themselves, but are very local, so they don't span across guards. Just like any construct in Haskell that is used to bind values to names, let bindings can be used for pattern matching. The difference between let and where bindings is that let bindings are expressions themselves but where bindings are just syntactic constructs.
+```Haskell
+4 * (let a = 9 in a + 1) + 2  -- 42
+```
+We can also put let bindings inside list comprehensions.
+```Haskell
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]  
+calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2] 
+```
