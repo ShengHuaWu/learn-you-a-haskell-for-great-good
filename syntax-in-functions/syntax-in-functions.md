@@ -50,3 +50,21 @@ We can also put let bindings inside list comprehensions.
 calcBmis :: (RealFloat a) => [(a, a)] -> [a]  
 calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2] 
 ```
+
+### Case Expression
+Not only can we evaluate expressions based on the possible cases of the value of a variable, we can also do pattern matching. 
+```Haskell
+case expression of pattern -> result  
+                   pattern -> result  
+                   pattern -> result  
+                   ...  
+```
+`expression` is matched against the patterns. The pattern matching action is the same as expected: the first pattern that matches the expression is used. If it falls through the whole case expression and no suitable pattern is found, a runtime error occurs.
+
+Whereas pattern matching on function parameters can only be done when defining functions, case expressions can be used pretty much anywhere.
+```Haskell
+describeList :: [a] -> String  
+describeList xs = "The list is " ++ case xs of [] -> "empty."  
+                                               [x] -> "a singleton list."   
+                                               xs -> "a longer list."
+```
