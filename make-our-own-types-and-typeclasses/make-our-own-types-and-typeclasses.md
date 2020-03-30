@@ -52,3 +52,29 @@ Again, it is similar to conforming a protocol or an interface in other programmi
 Most of the times, class constraints in class declarations are used for making a typeclass a subclass of another typeclass and class constraints in instance declarations are used to express requirements about the contents of some type. For instance, here we required the contents of the Maybe to also be part of the Eq typeclass. This is similar to associated type of protocols in Swift.
 
  If we want to see what the instances of a typeclass are, just do `:info YourTypeClass` in GHCI, for example, `:info Num`. If we do `:info Maybe`, it will show all the typeclasses that `Maybe` is an instance of. Also `:info` can show the type declaration of a function.
+
+ ### Yes-no typeclass
+ ```Haskell
+ class YesNo a where
+    yesno :: a -> Bool
+ ```
+ This yes-no typeclass can be used for checking condition, for example,
+ ```Haskell
+ yesnoif (YesNo y) :: y -> a -> a -> a
+ yesnoif yn a1 a2 = if yesno yn then a1 else a2
+ ```
+
+ ### Functor typeclass
+ ```Haskell
+ class Functor f where  
+    fmap :: (a -> b) -> f a -> f b 
+ ```
+  The `f` here is NOT a concrete type (a type that a value can hold, like `Int`, `Bool` or `Maybe String`), but a type constructor that takes one type parameter, for example, `[a]` is already a concrete type (of a list with any type inside it), while `[]` is a type constructor that takes one type and can produce types such as `[Int]`, `[String]` or even `[[String]]`. We see that `fmap` takes a function from one type to another and a functor applied with one type and returns a functor applied with another type.
+
+  Here's how `Maybe` is a functor.
+  ```Haskell
+  instance Functor Maybe where  
+    fmap f (Just x) = Just (f x)  
+    fmap f Nothing = Nothing
+  ```
+  Notice how we wrote `instance Functor Maybe where` instead of `instance Functor (Maybe m) where`.
