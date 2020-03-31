@@ -78,3 +78,6 @@ Most of the times, class constraints in class declarations are used for making a
     fmap f Nothing = Nothing
   ```
   Notice how we wrote `instance Functor Maybe where` instead of `instance Functor (Maybe m) where`.
+
+  ### Kinds and some type-foo
+  We used `:k` on a type to get its kind, just like we can use `:t` on a value to get its type. Like we said, types are the labels of values and kinds are the labels of types and there are parallels between the two.
