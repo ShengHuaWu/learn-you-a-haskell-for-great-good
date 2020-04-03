@@ -27,6 +27,7 @@ main = do
     putStrLn $ "Hey " ++ upperFirstName ++ " " ++ upperLastName ++ ", how are you?"
 -}
 
+{-
 -- It's just a normal function that takes a string like "hey there man"
 -- and then calls `words` with it to produce a list of words like ["hey","there","man"]. 
 -- Then we `map reverse` on the list, getting ["yeh","ereht","nam"] 
@@ -42,3 +43,9 @@ main = do
         else do
             putStrLn $ reverseWords line
             main
+-}
+
+main = do
+    rs <- sequence [getLine, getLine, getLine]
+    print rs
+    mapM print [1, 2, 3]
