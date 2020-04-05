@@ -16,3 +16,6 @@ In Haskell, every `if` must have a corresponding `else` because every expression
 The `return` in Haskell is really nothing like the return in most other languages. In Haskell (in I/O actions specifically), it makes an I/O action out of a pure value. If you think about the box analogy from before, it takes a value and wraps it up in a box. The resulting I/O action doesn't actually do anything, it just has that value encapsulated as its result.
 
 Using `return` doesn't cause the I/O do block to end in execution or anything like that.
+
+### Files and streams
+`getContents` is an I/O action that reads everything from the standard input until it encounters an end-of-file character. Its type is `getContents :: IO String`. What's cool about `getContents` is that it does lazy I/O. When we do `foo <- getContents`, it doesn't read all of the input at once, store it in memory and then bind it to `foo`.
