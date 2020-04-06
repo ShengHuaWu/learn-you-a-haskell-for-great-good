@@ -19,3 +19,11 @@ Using `return` doesn't cause the I/O do block to end in execution or anything li
 
 ### Files and streams
 `getContents` is an I/O action that reads everything from the standard input until it encounters an end-of-file character. Its type is `getContents :: IO String`. What's cool about `getContents` is that it does lazy I/O. When we do `foo <- getContents`, it doesn't read all of the input at once, store it in memory and then bind it to `foo`.
+
+`FilePath` is just a type synonym for `String`. `type FilePath = String`.
+
+Note the difference between the handle used to identify a file and the contents of the file. The handle is just something by which we know what our file is. If we imagine our whole file system to be a really big book and each file is a chapter in the book, the handle is a bookmark that shows where we're currently reading (or writing) a chapter, whereas the contents are the actual chapter.
+
+For text files, the default buffering is line-buffering usually. That means that the smallest part of the file to be read at once is one line. That's why in this case it actually reads a line, prints it to the output, reads the next line, prints it, etc. For binary files, the default buffering is usually block-buffering. That means that it will read the file chunk by chunk. The chunk size is some size that your operating system thinks is cool.
+
+When we're doing line-buffering, the buffer is flushed after every line. When we're doing block-buffering, it's after we've read a chunk. It's also flushed after closing a handle. That means that when we've reached a newline character, the reading (or writing) mechanism reports all the data so far. 
