@@ -28,4 +28,7 @@ For text files, the default buffering is line-buffering usually. That means that
 
 When we're doing line-buffering, the buffer is flushed after every line. When we're doing block-buffering, it's after we've read a chunk. It's also flushed after closing a handle. That means that when we've reached a newline character, the reading (or writing) mechanism reports all the data so far. 
 
-### Command line arguments
+### Randomness
+Referential transparency means a function, if given the same parameters twice, must produce the same result twice. 
+
+In Haskell, we can make a random number then if we make a function that takes as its parameter that randomness and based on that returns some number (or other data type).
