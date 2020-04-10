@@ -32,3 +32,14 @@ When we're doing line-buffering, the buffer is flushed after every line. When we
 Referential transparency means a function, if given the same parameters twice, must produce the same result twice. 
 
 In Haskell, we can make a random number then if we make a function that takes as its parameter that randomness and based on that returns some number (or other data type).
+
+### Bytestrings
+Remember that `[1,2,3,4]` is syntactic sugar for `1:2:3:4:[]`. When the first element of the list is forcibly evaluated (say by printing it), the rest of the list `2:3:4:[]` is still just a promise of a list, and so on. 
+
+Bytestrings are sort of like lists, only each element is one byte (or 8 bits) in size. The way they handle laziness is also different.
+
+Strict bytestrings reside in `Data.ByteString` and they do away with the laziness completely. There are no promises involved; a strict bytestring represents a series of bytes in an array. You can't have things like infinite strict bytestrings. If you evaluate the first byte of a strict bytestring, you have to evaluate it whole.
+
+The other variety of bytestrings resides in `Data.ByteString.Lazy`. They're lazy, but not quite as lazy as lists. Lazy bytestrings take a different approach — they are stored in chunks, each chunk has a size of 64K. So if we evaluate a byte in a lazy bytestring (by printing it or something), the first 64K will be evaluated. After that, it's just a promise for the rest of the chunks.
+
+What's the deal with that `Word8` type? Well, it's like `Int`, only that it has a much smaller range, namely 0-255. It represents an 8-bit number. And just like Int, it's in the `Num` typeclass. For instance, we know that the value `5` is polymorphic in that it can act like any numeral type. Well, it can also take the type of `Word8`.
