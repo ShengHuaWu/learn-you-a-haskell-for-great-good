@@ -43,3 +43,12 @@ Strict bytestrings reside in `Data.ByteString` and they do away with the lazines
 The other variety of bytestrings resides in `Data.ByteString.Lazy`. They're lazy, but not quite as lazy as lists. Lazy bytestrings take a different approach — they are stored in chunks, each chunk has a size of 64K. So if we evaluate a byte in a lazy bytestring (by printing it or something), the first 64K will be evaluated. After that, it's just a promise for the rest of the chunks.
 
 What's the deal with that `Word8` type? Well, it's like `Int`, only that it has a much smaller range, namely 0-255. It represents an 8-bit number. And just like Int, it's in the `Num` typeclass. For instance, we know that the value `5` is polymorphic in that it can act like any numeral type. Well, it can also take the type of `Word8`.
+
+### Exceptions
+Even though doing some logic in I/O is necessary (like opening files and the like), it should preferably be kept to a minimum. 
+
+Pure functions are lazy by default, which means that we don't know when they will be evaluated and that it really shouldn't matter. However, once pure functions start throwing exceptions, it matters when they are evaluated. That's why we can only catch exceptions thrown from pure functions in the I/O part of our code. However, if we don't catch them in the I/O part of our code, our program crashes. The solution? Don't mix exceptions and pure code. Take advantage of Haskell's powerful type system and use types like `Either` and `Maybe` to represent results that may have failed.
+
+How `IOError` type is implemented depends on the implementation of the language itself, which means that we can't inspect values of the type `IOError` by pattern matching against them, just like we can't pattern match against values of type `IO something`. We can use a bunch of useful predicates to find out stuff about values of type `IOError` , for example, `isDoesNotExistError` is a predicate over `IOErrors`, which means that it's a function that takes an `IOError` and returns a `True` or `False`, meaning it has a type of `isDoesNotExistError :: IOError -> Bool`.
+
+Be sure to re-throw exceptions if they don't match any of our criteria, otherwise we're causing our program to fail silently in some cases where it shouldn't.
