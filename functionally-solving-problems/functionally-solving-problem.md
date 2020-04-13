@@ -1,1 +1,3 @@
 ## Functionally Solving Problems
+### Reverse polish notation calculator
+How do we calculate what the result of that is? Well, think of a stack. We go over the expression from left to right. Every time a number is encountered, push it on to the stack. When we encounter an operator, take the two numbers that are on top of the stack (we also say that we pop them), use the operator and those two and then push the resulting number back onto the stack. When we reach the end of the expression, we should be left with a single number if the expression was well-formed and that number represents the result.
