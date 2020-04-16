@@ -7,3 +7,21 @@ We can't write `instance Functor Either where`, but we can write `instance Funct
 The first functor law states that if we map the `id` function over a functor, the functor that we get back should be the same as the original functor. This means that `fmap id = id`.
 
 The second law says that composing two functions and then mapping the resulting function over a functor should be the same as first mapping one function over the functor and then mapping the other one. Formally written, that means that `fmap (f . g) = fmap f . fmap g`.
+
+### Applicative functors
+Doing `fmap (*) (Just 3)` results in `Just ((*) 3)`, which can also be written as `Just (* 3)` if we use sections.
+
+A better way of thinking about `pure` would be to say that it takes a value and puts it in some sort of default (or pure) context—a minimal context that still yields that value.
+
+ `<*>` takes a functor that has a function in it and another functor and sort of extracts that function from the first functor and then maps it over the second one.
+
+ Applicative functors and the applicative style of doing `pure f <*> x <*> y <*> ...` allow us to take a function that expects parameters that aren't necessarily wrapped in functors and use that function to operate on several values that are in functor contexts. The function can take as many parameters as we want, because it's always partially applied step by step between occurences of `<*>`.
+
+ Using the applicative style on lists is often a good replacement for list comprehensions, for example,
+ ```Haskell
+ ghci> [ x*y | x <- [2,5,10], y <- [8,10,11]]     
+[16,20,22,40,50,55,80,100,110]
+
+ghci> (*) <$> [2,5,10] <*> [8,10,11]  
+[16,20,22,40,50,55,80,100,110]  
+ ```
