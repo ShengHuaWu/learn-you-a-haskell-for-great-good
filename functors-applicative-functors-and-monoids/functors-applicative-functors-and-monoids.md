@@ -25,3 +25,16 @@ A better way of thinking about `pure` would be to say that it takes a value and 
 ghci> (*) <$> [2,5,10] <*> [8,10,11]  
 [16,20,22,40,50,55,80,100,110]  
  ```
+
+ If we ever find ourself binding some I/O actions to names and then calling some function on them and presenting that as the result by using return, consider using the applicative style because it's arguably a bit more concise and terse.
+
+ The `(,,)` function is the same as `\x y z -> (x,y,z)`. Also, the `(,)` function is the same as `\x y -> (x,y)`.
+
+ It seems that we can combine any amount of applicatives into one applicative that has a list of the results of those applicatives inside it.
+ ```Haskell
+sequenceA :: (Applicative f) => [f a] -> f [a]  
+sequenceA [] = pure []  
+sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
+ ```
+
+ Like normal functors, applicative functors come with a few laws. The most important one is the one that we already mentioned, namely that `pure f <*> x = fmap f x` holds.
