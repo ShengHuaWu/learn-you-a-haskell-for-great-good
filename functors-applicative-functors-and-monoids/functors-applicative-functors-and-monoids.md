@@ -38,3 +38,18 @@ sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
  ```
 
  Like normal functors, applicative functors come with a few laws. The most important one is the one that we already mentioned, namely that `pure f <*> x = fmap f x` holds.
+
+ ### The newtype keyword
+ The `newtype` keyword in Haskell is made exactly for these cases when we want to just take one type and wrap it in something to present it as another type.
+
+ If we use the `data` keyword to wrap a type, there's some overhead to all that wrapping and unwrapping when our program is running. But if we use `newtype`, Haskell knows that we're just using it to wrap an existing type into a new type (hence the name), because we want it to be the same internally but have a different type. With that in mind, Haskell can get rid of the wrapping and unwrapping once it resolves which value is of what type.
+
+ When we make a new type from an existing type by using the `newtype` keyword, we can only have one value constructor and that value constructor can only have one field. But with `data`, we can make data types that have several value constructors and each constructor can have zero or more fields.
+
+ The `type` keyword is for making type synonyms. What that means is that we just give another name to an already existing type so that the type is easier to refer to. The new type and the original type can be used interchangeably.
+
+ The `newtype` keyword is for taking existing types and wrapping them in new types, mostly so that it's easier to make them instances of certain type classes. When we use newtype to wrap an existing type, the type that we get is separate from the original type.
+
+ The `data` keyword is for making our own data types and with them. They can have as many constructors and fields as we wish and can be used to implement any algebraic data type by ourselves.
+
+ If we just want your type signatures to look cleaner and be more descriptive, we probably want `type` synonyms. If we want to take an existing type and wrap it in a new type in order to make it an instance of a type class, chances are we're looking for a `newtype`. And if we want to make something completely new, odds are good that we're looking for the `data` keyword.
