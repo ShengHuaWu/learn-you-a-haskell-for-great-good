@@ -53,3 +53,8 @@ sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
  The `data` keyword is for making our own data types and with them. They can have as many constructors and fields as we wish and can be used to implement any algebraic data type by ourselves.
 
  If we just want your type signatures to look cleaner and be more descriptive, we probably want `type` synonyms. If we want to take an existing type and wrap it in a new type in order to make it an instance of a type class, chances are we're looking for a `newtype`. And if we want to make something completely new, odds are good that we're looking for the `data` keyword.
+
+ ### Monoids
+ A monoid is when we have an associative binary function (`mappend`) and a value which acts as an identity with respect to that function (`mempty`). 
+
+ We see that only concrete types can be made instances of `Monoid`. This is different from `Functor` and `Applicative`, which require their instances to be type constructors which take one parameter.
