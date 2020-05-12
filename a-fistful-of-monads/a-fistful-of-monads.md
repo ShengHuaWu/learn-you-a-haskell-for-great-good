@@ -16,3 +16,20 @@ m >> n = m >>= \_ -> n
 ```
 
 By turning those values into `Maybe` values and replacing normal function application with `>>=`, we got a mechanism for handling failure pretty much for free, because `>>=` is supposed to preserve the context of the value to which it applies functions. In this case, the context was that our values were values with failure and so when we applied functions to such values, the possibility of failure was always taken into account.
+
+### do notation
+It turns out, `do` notation isn't just for `IO`, but can be used for any monad. Its principle is still the same: gluing together monadic values in sequence. 
+
+Because `do` expressions are written line by line, they may look like imperative code to some people. But the thing is, they're just sequential, as each value in each line relies on the result of the previous ones, along with their contexts.
+
+When we write a line in `do` notation without binding the monadic value with `<-`, it's just like putting `>>` after the monadic value whose result we want to ignore. We sequence the monadic value but we ignore its result because we don't care what it is.
+
+In `do` notation, when we bind monadic values to names, we can utilize pattern matching, just like in `let` expressions and function parameters, for example,
+```Haskell
+justH :: Maybe Char  
+justH = do  
+    (x:xs) <- Just "hello"  
+    return x  
+```
+
+When pattern matching fails in a do expression, the `fail` function is called. It's part of the `Monad` type class and it enables failed pattern matching to result in a failure in the context of the current monad instead of making our program crash.
