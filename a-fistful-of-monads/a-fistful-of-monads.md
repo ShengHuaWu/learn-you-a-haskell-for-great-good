@@ -33,3 +33,6 @@ justH = do
 ```
 
 When pattern matching fails in a do expression, the `fail` function is called. It's part of the `Monad` type class and it enables failed pattern matching to result in a failure in the context of the current monad instead of making our program crash.
+
+### The list monad
+In fact, list comprehensions are just syntactic sugar for using lists as monads. In the end, list comprehensions and lists in `do` notation translate to using `>>=` to do computations that feature non-determinism.
