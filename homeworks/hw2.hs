@@ -35,8 +35,12 @@ parseMessage text = case first of
         (first, reminder) = parseMessageType text
         (time, message) = readFirstInt reminder
 
+parse :: String -> [LogMessage]
+parse = (fmap parseMessage) . lines
+
 main = do
-    print (parseMessage "W 1234 This is a warning")
-    print (parseMessage "I 6543 This is a information")
-    print (parseMessage "E 99 124 This is an error")
-    print (parseMessage "K xyz whatever")
+    let text = "W 1234 This is a warning\n\
+    \I 6543 This is a information\n\
+    \E 99 124 This is an error"
+    print . parse $ text
+    -- print . parseMessage $ "K xyz whatever"
