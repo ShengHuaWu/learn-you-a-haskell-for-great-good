@@ -36,3 +36,8 @@ When pattern matching fails in a do expression, the `fail` function is called. I
 
 ### The list monad
 In fact, list comprehensions are just syntactic sugar for using lists as monads. In the end, list comprehensions and lists in `do` notation translate to using `>>=` to do computations that feature non-determinism.
+
+### Monad Laws
+Left identity: `return x >>= f` is the same thing as `f x`.
+Right identity: `m >>= return` is no different than just `m`.
+Associativity: Doing `(m >>= f) >>= g` is just like doing `m >>= (\x -> f x >>= g)`.
