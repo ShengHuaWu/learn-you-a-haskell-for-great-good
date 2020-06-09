@@ -14,3 +14,11 @@ This associates to the left instead of to the right. This is inefficient because
 A difference list is similar to a list, only instead of being a normal list, it's a function that takes a list and prepends another list to it. The difference list equivalent of a list like `[1,2,3]` would be the function `\xs -> [1,2,3] ++ xs`. A normal empty list is `[]`, whereas an empty difference list is the function `\xs -> [] ++ xs`.
 
 ### Reader
+```Haskell
+let f = (+) <$> (*2) <*> (+10)
+f 3 -- 19
+```
+The expression `(+) <$> (*2) <*> (+10)` makes a function that takes a number, gives that number to `(*2)` and `(+10)` and then adds together the results. For instance, if we apply this function to 3, it applies both `(*2)` and `(+10)` to 3, giving 6 and 13. Then, it calls `(+)` with 6 and 13 and the result is 19.
+
+### Tasteful stateful computations
+Haskell features a thing called the state monad, which makes dealing with stateful problems a breeze while still keeping everything nice and pure.
