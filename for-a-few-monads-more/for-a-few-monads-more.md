@@ -9,4 +9,8 @@ If we're not careful, using the `Writer` monad can produce list appending that l
 ```Haskell
 ((((a ++ b) ++ c) ++ d) ++ e) ++ f  
 ```
-This associates to the left instead of to the right. This is inefficient because every time it wants to add the right part to the left part, it has to construct the left part all the way from the beginning!
+This associates to the left instead of to the right. This is inefficient because every time it wants to add the right part to the left part, it has to construct the left part all the way from the beginning.
+
+A difference list is similar to a list, only instead of being a normal list, it's a function that takes a list and prepends another list to it. The difference list equivalent of a list like `[1,2,3]` would be the function `\xs -> [1,2,3] ++ xs`. A normal empty list is `[]`, whereas an empty difference list is the function `\xs -> [] ++ xs`.
+
+### Reader
