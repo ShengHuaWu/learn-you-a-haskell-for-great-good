@@ -22,3 +22,8 @@ The expression `(+) <$> (*2) <*> (+10)` makes a function that takes a number, gi
 
 ### Tasteful stateful computations
 Haskell features a thing called the state monad, which makes dealing with stateful problems a breeze while still keeping everything nice and pure.
+
+### Error error on the wall
+The `Either e a` type allows us to incorporate a context of possible failure to our values while also being able to attach values to the failure, so that they can describe what went wrong or provide some other useful info regarding the failure. An `Either e a` value can either be a `Right` value, signifying the right answer and a success, or it can be a `Left` value, signifying failure.
+
+### Some useful monadic functions
