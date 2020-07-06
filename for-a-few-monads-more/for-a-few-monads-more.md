@@ -27,3 +27,17 @@ Haskell features a thing called the state monad, which makes dealing with statef
 The `Either e a` type allows us to incorporate a context of possible failure to our values while also being able to attach values to the failure, so that they can describe what went wrong or provide some other useful info regarding the failure. An `Either e a` value can either be a `Right` value, signifying the right answer and a success, or it can be a `Left` value, signifying failure.
 
 ### Some useful monadic functions
+```Haskell
+liftM :: (Monad m) => (a -> b) -> m a -> m b 
+liftM f m = m >>= (\x -> return (f x))
+```
+Doing `fmap` or `liftM` over a stateful computation results in another stateful computation, only its eventual result is modified by the supplied function.
+
+```Haskell
+ap :: (Monad m) => m (a -> b) -> m a -> m b  
+ap mf m = do  
+    f <- mf  
+    x <- m  
+    return (f x)
+```
+The `ap` function is basically `<*>`, only it has a `Monad` constraint instead of an `Applicative` one. 
