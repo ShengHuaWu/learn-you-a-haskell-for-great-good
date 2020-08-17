@@ -45,6 +45,12 @@ instance Ord GuestList where
 glCons :: Employee -> GuestList -> GuestList
 glCons (Emp n f) (GL xs fun) = GL ((Emp { empName = n, empFun = f }):xs) (f+fun)
 
+instance Semigroup GuestList where
+    (GL xs f1) <> (GL ys f2) = GL (xs++ys) (f1+f2)
+
+instance Monoid GuestList where -- Monoid needs Semigroup
+    mempty = GL [] 0
+
 main = do
     print (glCons (Emp "Stan" 9) (GL [] 0))
     print (glCons (Emp "Sam" 4) (GL [Emp {empName = "Stan", empFun = 9}] 9))
