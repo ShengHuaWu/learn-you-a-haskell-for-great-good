@@ -51,6 +51,22 @@ instance Semigroup GuestList where
 instance Monoid GuestList where -- Monoid needs Semigroup
     mempty = GL [] 0
 
+moreFun :: GuestList -> GuestList -> GuestList
+moreFun (GL xs f1) (GL ys f2) 
+  | f1 > f2 = GL xs f1
+  | otherwise = GL ys f2
+
+treeFold :: (b -> a -> b) -> b -> Tree a -> b
+treeFold f initial (Node label []) = f initial label
+treeFold f initial tree = 
+  let result = f initial (rootLabel tree) 
+      nextResult = (\r t -> treeFold f r t) in
+  foldl nextResult result (subForest tree) -- foldl :: (b -> Tree a -> b) -> b -> [Tree a] -> b
+
+
 main = do
     print (glCons (Emp "Stan" 9) (GL [] 0))
     print (glCons (Emp "Sam" 4) (GL [Emp {empName = "Stan", empFun = 9}] 9))
+    print (moreFun (GL [] 0) (GL [Emp {empName = "Stan", empFun = 9}] 9))
+    print (treeFold (\r e -> r + (empFun e)) 0 testCompany)
+    print (treeFold (\r e -> r + (empFun e)) 0 testCompany2)
