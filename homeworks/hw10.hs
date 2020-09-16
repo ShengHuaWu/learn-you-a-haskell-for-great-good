@@ -27,11 +27,11 @@ satisfy p = Parser f
 char :: Char -> Parser Char
 char c = satisfy (== c)
 
-tuple :: Char -> Char -> (Char, Char)
-tuple a b = (a, b)
+toTuple :: Char -> Char -> (Char, Char)
+toTuple a b = (a, b)
 
 abParser :: Parser (Char, Char)
-abParser = tuple <$> char 'a' <*> char 'b'
+abParser = toTuple <$> char 'a' <*> char 'b'
 
 abParser_ :: Parser ()
 abParser_ =  (\x -> ()) <$> abParser
@@ -56,6 +56,31 @@ secondPosInt = ignoreFirst <$> char ' ' <*> posInt
 intPair :: Parser [Integer]
 intPair = pair <$> posInt <*> secondPosInt
 
+class Applicative f => Alternative f where
+    empty :: f a
+    (<|>) :: f a -> f a -> f a
+
+instance Alternative Parser where
+    empty = Parser (\s -> Nothing)
+    p1 <|> p2 = Parser (\s -> case runParser p1 s of
+        Nothing -> case runParser p2 s of
+            Nothing -> Nothing
+            Just a -> Just a
+        Just a -> Just a
+        ) 
+
+toVoid :: a -> ()
+toVoid _ = ()
+
+uppercase :: Parser String
+uppercase = (\x -> x:[]) <$> satisfy isUpper
+
+posIntString :: Parser String
+posIntString = show <$> posInt
+
+intOrUppercase :: Parser ()
+intOrUppercase = toVoid <$> (posIntString <|> uppercase)
+
 main = do
     print(first (+2) (1, True))
     print(runParser abParser "abcdefg")
@@ -63,3 +88,6 @@ main = do
     print(runParser abParser_ "abcdefg")
     print(runParser abParser_ "aubcdefg")
     print(runParser intPair "12 34")
+    print(runParser intOrUppercase "342abcd")
+    print(runParser intOrUppercase "XYZ")
+    print(runParser intOrUppercase "foo")
