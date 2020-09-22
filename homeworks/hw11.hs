@@ -21,8 +21,49 @@ zeroOrMore p = (oneOrMore p) <|> pure []
 oneOrMore :: Parser a -> Parser [a]
 oneOrMore p = (:) <$> p <*> zeroOrMore p
 
+spaces :: Parser String
+spaces = zeroOrMore (satisfy isSpace)
+
+ident :: Parser String
+ident = (:) <$> satisfy isAlpha <*> zeroOrMore (satisfy isAlphaNum)
+
+type Ident = String
+data Atom = N Integer | I Ident deriving Show
+data SExpr = A Atom | Comb [SExpr] deriving Show
+
+parseAtomInteger :: Parser Atom
+parseAtomInteger = N <$> posInt
+
+parseAtomIdent :: Parser Atom
+parseAtomIdent = I <$> ident
+
+parseSExprAtom :: Parser SExpr
+parseSExprAtom = A <$> (parseAtomInteger <|> parseAtomIdent)
+
+openParenthesis :: Parser [Char]
+openParenthesis = zeroOrMore (satisfy (=='('))
+
+closeParenthesis :: Parser [Char]
+closeParenthesis = zeroOrMore (satisfy (==')'))
+
+-- parseSExprs :: Parser [SExpr]
+-- parseSExprs = openParenthesis *> spaces *> parseSExprAtom
+
+-- parseSExprComb :: Parser SExpr
+-- parseSExprComb = Comb <$> 
+
+parseSExpr :: Parser SExpr
+parseSExpr = parseSExprAtom
+
 main = do
     print(runParser (zeroOrMore (satisfy isUpper)) "ABCdEfgH")
     print(runParser (oneOrMore (satisfy isUpper)) "ABCdEfgH")
     print(runParser (zeroOrMore (satisfy isUpper)) "abcdeFGh")
     print(runParser (oneOrMore (satisfy isUpper)) "abcdeFGh")
+    print(runParser ident "foobar baz")
+    print(runParser ident "foo33fA")
+    print(runParser ident "2bad")
+    print(runParser ident "")
+    print(runParser parseSExpr "5")
+    print(runParser parseSExpr "foo3")
+    -- print(runParser parseSExpr "(bar (foo) 3 5 874)")
