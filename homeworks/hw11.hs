@@ -15,6 +15,7 @@ replicateA :: Applicative f => Int -> f a -> f [a]
 replicateA 0 _ = pure []
 replicateA count x = (:) <$> x <*> replicateA (count-1) x
 
+-- Parsers
 zeroOrMore :: Parser a -> Parser [a]
 zeroOrMore p = (oneOrMore p) <|> pure []
 
@@ -46,14 +47,12 @@ openParenthesis = zeroOrMore (satisfy (=='('))
 closeParenthesis :: Parser [Char]
 closeParenthesis = zeroOrMore (satisfy (==')'))
 
--- parseSExprs :: Parser [SExpr]
--- parseSExprs = openParenthesis *> spaces *> parseSExprAtom
-
--- parseSExprComb :: Parser SExpr
--- parseSExprComb = Comb <$> 
+-- How to ensure there are a pair of open and close parethesis?
+parseSExprComb :: Parser SExpr
+parseSExprComb = Comb <$> oneOrMore (openParenthesis *> spaces *> parseSExprAtom <* spaces <* closeParenthesis)
 
 parseSExpr :: Parser SExpr
-parseSExpr = parseSExprAtom
+parseSExpr = parseSExprAtom <|> parseSExprComb
 
 main = do
     print(runParser (zeroOrMore (satisfy isUpper)) "ABCdEfgH")
@@ -66,4 +65,5 @@ main = do
     print(runParser ident "")
     print(runParser parseSExpr "5")
     print(runParser parseSExpr "foo3")
-    -- print(runParser parseSExpr "(bar (foo) 3 5 874)")
+    print(runParser parseSExpr "(bar8 (foo))")
+    print(runParser parseSExpr "( bar8 ( foo ) 3 5 789 )")
