@@ -64,11 +64,22 @@ invade b
     | defenders b == 0 = return b
     | otherwise = battle b >>= invade
 
+nextSuccess :: Int -> Battlefield -> Int
+nextSuccess n b
+    | defenders b == 0 = n + 1
+    | otherwise = n
+
+checkResults :: [Battlefield] -> Double
+checkResults bs = (fromIntegral $ foldl nextSuccess 0 bs) / (fromIntegral $ length bs) -- Cannot use `div` here
+
+successProb :: Battlefield -> Rand StdGen Double
+successProb b = checkResults <$> replicateA 1000 (invade b)
+
 main = do 
     print "Hello World"
 
     let b1 = Battlefield 4 6
-    print $ evalRand (invade b1) testStdGen
+    print $ evalRand (successProb b1) testStdGen
 
     let b2 = Battlefield 6 3
-    print $ evalRand (invade b2) testStdGen
+    print $ evalRand (successProb b2) testStdGen
