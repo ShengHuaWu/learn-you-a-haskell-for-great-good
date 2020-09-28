@@ -58,11 +58,17 @@ battle b =
     in
         updateArmy b <$> results
 
+invade :: Battlefield -> Rand StdGen Battlefield
+invade b
+    | attackers b < 2 = return b
+    | defenders b == 0 = return b
+    | otherwise = battle b >>= invade
+
 main = do 
     print "Hello World"
 
     let b1 = Battlefield 4 6
-    print $ evalRand (battle b1) testStdGen
+    print $ evalRand (invade b1) testStdGen
 
     let b2 = Battlefield 6 3
-    print $ evalRand (battle b2) testStdGen
+    print $ evalRand (invade b2) testStdGen
